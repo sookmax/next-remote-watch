@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-disable import/order */
+/* eslint-disable node/shebang */
 
 const chalk = require('chalk')
 const chokidar = require('chokidar')
@@ -95,7 +97,12 @@ app.prepare().then(() => {
             }
           }
 
-          app.server.hotReloader.send('reloadPage')
+          // app.server.hotReloader.send('reloadPage')
+          // https://github.com/hashicorp/next-remote-watch/issues/42#issue-1362425425
+          app.server.hotReloader.send({
+            event: 'serverOnlyChanges',
+            pages: ['/post/[slug]'],
+          })
         }
       )
   }
