@@ -130,9 +130,29 @@ app.prepare().then(() => {
   // handle all other routes with next.js
   server.all('*', (req, res) => handle(req, res, parse(req.url, true)))
 
+  // check the local network address if the host is 0.0.0.0
+  // ref: https://stackoverflow.com/a/8440736
+  let localAddrs = hostname === '0.0.0.0' ? ['localhost'] : [hostname]
+
+  if (hostname === '0.0.0.0') {
+    const os = require('os')
+    const otherInterfaces = Object.values(os.networkInterfaces())
+      .flat()
+      .filter((net) => {
+        // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+        // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
+        const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+        return net.family === familyV4Value && !net.internal
+      })
+      .map((net) => net.address)
+    localAddrs = [...localAddrs, ...otherInterfaces]
+  }
+
   // fire it up
   server.listen(port, (err) => {
     if (err) throw err
-    console.log(`> Ready on http://localhost:${port}`)
+    localAddrs.forEach((addr) => {
+      console.log(`> Ready on http://${addr}:${port}`)
+    })
   })
 })
