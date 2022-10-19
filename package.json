@@ -19,10 +19,7 @@
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-node": "^11.1.0",
     "jest": "^26.6.3",
-    "next": "^12.1.0",
     "prettier": "^2.3.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "release": "^6.1.0"
   },
   "engines": {
@@ -31,7 +28,7 @@
   "license": "MPL-2.0",
   "main": "index.js",
   "peerDependencies": {
-    "next": ">=10"
+    "next": ">=10||12.3.2-canary.31"
   },
   "repository": {
     "type": "git",
